@@ -40,9 +40,11 @@
   }
 
   function setupAutocomplete(selector) {
-    const autocompleteInput = document.querySelector(`${selector} input`);
-    const autocompleteOutput = document.querySelector(`${selector} .results`);
+    
+    const autocompleteInput = document.querySelector('.' + selector + ' input');
+    const autocompleteOutput = document.querySelector('.' + selector + ' .results');
 
+    
     function showResults(data) {
       autocompleteOutput.innerHTML = "";
       for (const post of data) {
@@ -54,10 +56,21 @@
       "keyup",
       debounce(key => {
         const text = key.target.value;
-        fetchData(text).then(showResults);
+        
+        //Solo busco si tengo escribo algo en el input
+        if(text != "" ){
+          
+          fetchData(text).then(showResults);
+        
+        }//si no escribo nada, borro el contenido
+        else{
+        
+          autocompleteOutput.innerHTML = '';
+        
+        }
       }, 50)
     );
-    fetchData("").then(showResults);
+  //  fetchData("").then(showResults);
   }
 
   function init() {
