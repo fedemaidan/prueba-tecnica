@@ -16,8 +16,9 @@ import { DialogBoxComponent } from 'src/app/components/dialog-box/dialog-box.com
 })
 export class QuestionListComponent implements OnInit {
 
-  displayedColumns: string[] = [ 'name', 'phone', 'email', 'id']; 
+  displayedColumns: string[] = [ 'name', 'phone', 'email', 'id', 'action']; 
   dataSource: MatTableDataSource<Question>;
+  newID: number; 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -58,8 +59,12 @@ export class QuestionListComponent implements OnInit {
     });
  
     dialogRef.afterClosed().subscribe(result => {
-      if(result.event == 'Add'){
+      if(result.event == 'Agregar'){
         this.addRowData(result.data);
+      }else if(result.event == 'Actualizar'){
+        this.updateRowData(result.data);
+      }else if(result.event == 'Borrar'){
+        this.deleteRowData(result.data);
       }
     });
   }
@@ -67,8 +72,10 @@ export class QuestionListComponent implements OnInit {
   addRowData(row_obj){
     
     const data = this.dataSource.data;
+
+    
     data.push({
-      id:data.length + 1 , 
+      id:data.length + 1, 
       name:row_obj.name,
       phone:row_obj.phone,
       email:row_obj.email,
@@ -79,6 +86,25 @@ export class QuestionListComponent implements OnInit {
     this.table.renderRows();
     
   }
+  
+  updateRowData(row_obj){
+    this.dataSource.data = this.dataSource.data.filter((value,key)=>{
+      if(value.id == row_obj.id){
+        value.name = row_obj.name;
+        value.phone = row_obj.phone;
+        value.email = row_obj.email;
+        value.message = row_obj.message;
+
+      }
+      return true;
+    });
+  }
+  deleteRowData(row_obj){
+    this.dataSource.data = this.dataSource.data.filter((value,key)=>{
+      return value.id != row_obj.id;
+    });
+  }
+
 
 }
 
