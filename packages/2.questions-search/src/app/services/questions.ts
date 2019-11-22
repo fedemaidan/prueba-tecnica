@@ -15,4 +15,4 @@ function fakeQuestion(id: number): Question {
 //brokes disponibles
 export const brokers = [1, 2, 3, 40, 6];
 //array de 100 datos fakes
-export const questions: Array<Question> = [...Array(100).keys()].map(fakeQuestion);
+export const questions: Array<Question> = [...Array(3).keys()].map(fakeQuestion);

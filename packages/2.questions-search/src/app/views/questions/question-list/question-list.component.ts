@@ -4,8 +4,9 @@ import { QuestionsService } from 'src/app/services/questions.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import { MatInput} from '@angular/material';
+import { MatInput, MatDialog, MatTable } from '@angular/material';
 import {MatFormField} from '@angular/material/form-field';
+import { DialogBoxComponent } from 'src/app/components/dialog-box/dialog-box.component';
 
 
 @Component({
@@ -20,16 +21,15 @@ export class QuestionListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
+  @ViewChild(MatTable) table: MatTable<any>;
 
   questions: Array<Question>;
-  constructor(questionsSvc: QuestionsService) {
+  constructor(questionsSvc: QuestionsService, public dialog: MatDialog) {
     questionsSvc.questions$.subscribe(q => {
       this.questions = q;
       console.log(this.questions);
       
     });
-
     this.dataSource = new MatTableDataSource(this.questions);
 
   }
@@ -48,6 +48,36 @@ export class QuestionListComponent implements OnInit {
 
   getQuestionId(index: number, item: Question): number {
     return item.id;
+  }
+
+  openDialog(action,obj) {
+    obj.action = action;
+    const dialogRef = this.dialog.open(DialogBoxComponent, {
+      width: '450px',
+      data:obj
+    });
+ 
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.event == 'Add'){
+        this.addRowData(result.data);
+      }
+    });
+  }
+ 
+  addRowData(row_obj){
+    
+    const data = this.dataSource.data;
+    data.push({
+      id:data.length + 1 , 
+      name:row_obj.name,
+      phone:row_obj.phone,
+      email:row_obj.email,
+      message: row_obj.message
+    });
+    this.dataSource.data = data;
+   
+    this.table.renderRows();
+    
   }
 
 }

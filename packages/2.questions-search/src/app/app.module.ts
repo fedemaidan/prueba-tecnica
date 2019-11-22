@@ -11,11 +11,15 @@ import { QuestionsService } from './services/questions.service';
 import { NotFoundComponent } from './views/questions/not-found/not-found.component';
 import { QuestionDetailComponent } from './views/questions/question-detail/question-detail.component';
 import { QuestionListComponent } from './views/questions/question-list/question-list.component';
+import { FormsModule } from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material';
+import { MatInputModule, MatDialogModule, MatButtonModule } from '@angular/material';
+import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
+
+
 
 @NgModule({
   declarations: [
@@ -26,17 +30,24 @@ import { MatInputModule } from '@angular/material';
     NavbarComponent,
     FooterComponent,
     NotFoundComponent,
+    DialogBoxComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
     MatToolbarModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDialogModule,
+    MatButtonModule,
+  ],
+  entryComponents: [
+    DialogBoxComponent
   ],
   providers: [QuestionsService],
   bootstrap: [AppComponent]
