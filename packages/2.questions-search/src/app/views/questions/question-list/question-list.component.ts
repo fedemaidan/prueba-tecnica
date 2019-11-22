@@ -18,7 +18,6 @@ export class QuestionListComponent implements OnInit {
 
   displayedColumns: string[] = [ 'name', 'phone', 'email', 'id', 'action']; 
   dataSource: MatTableDataSource<Question>;
-  newID: number; 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -54,7 +53,7 @@ export class QuestionListComponent implements OnInit {
   openDialog(action,obj) {
     obj.action = action;
     const dialogRef = this.dialog.open(DialogBoxComponent, {
-      width: '450px',
+      width: '500px',
       data:obj
     });
  

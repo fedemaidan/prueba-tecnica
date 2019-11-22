@@ -18,6 +18,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule, MatDialogModule, MatButtonModule } from '@angular/material';
 import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
+import {MatSelectModule} from '@angular/material/select';
 
 
 
@@ -45,6 +46,7 @@ import { DialogBoxComponent } from './components/dialog-box/dialog-box.component
     MatInputModule,
     MatDialogModule,
     MatButtonModule,
+    MatSelectModule,
   ],
   entryComponents: [
     DialogBoxComponent
