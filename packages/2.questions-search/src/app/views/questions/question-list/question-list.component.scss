@@ -19,7 +19,7 @@ mat-form-field {
 }
 
 mat-table{
-  width: 50%;
+  width: 40%;
 }
 
 mat-paginator{
@@ -28,7 +28,7 @@ mat-paginator{
 
 
 table.mat-table {
-  border-spacing: 0;
+  border-spacing: 0px;
   
 }
 
@@ -56,10 +56,10 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell, th.mat-sort-header {
 }
 
 th.mat-header-cell:first-child, td.mat-cell:first-child, td.mat-footer-cell:first-child,th.mat-sort-header:first-child {
-  padding-left: 24px;
+  padding-left: 55px;
 }
 
 th.mat-header-cell:last-child, td.mat-cell:last-child, td.mat-footer-cell:last-child, th.mat-sort-header:last-child {
-  padding-right: 24px;
+  padding-right: 0px;
 }
 
