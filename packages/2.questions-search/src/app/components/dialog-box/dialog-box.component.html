@@ -3,12 +3,12 @@
   <div mat-dialog-content class="container">
     
     <mat-form-field *ngIf="action != 'Borrar'; else elseTemplate" >
-      <input placeholder="{{action}} Nombre" matInput [(ngModel)]="local_data.name" required
+      <input placeholder="Nombre" matInput [(ngModel)]="local_data.name" required
       pattern="[a-zA-Z ]{1,32}">
     </mat-form-field>
     
     <mat-form-field *ngIf="action != 'Borrar' && action !='Actualizar';">
-      <input placeholder="{{action}} Email" matInput [(ngModel)]="local_data.email" required 
+      <input placeholder="Email" matInput [(ngModel)]="local_data.email" required 
       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" >
       <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
     </mat-form-field>
@@ -24,11 +24,11 @@
 
 
     <mat-form-field *ngIf="action != 'Borrar';">
-      <input placeholder="{{action}} Telefono" matInput [(ngModel)]="local_data.phone" pattern="^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[x\-\s\./0-9]*$">
+      <input placeholder="Telefono" matInput [(ngModel)]="local_data.phone" pattern="^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[x\-\s\./0-9]*$">
     </mat-form-field>
 
     <mat-form-field *ngIf="action != 'Borrar';">
-      <textarea  placeholder="{{action}} Mensaje" matInput [(ngModel)]="local_data.message"></textarea>
+      <textarea  placeholder="Mensaje" matInput [(ngModel)]="local_data.message"></textarea>
     </mat-form-field>
     <ng-template #elseTemplate>
       <p>¿Está seguro que desea Borrar la consulta de <b>{{local_data.name}}?</b></p>

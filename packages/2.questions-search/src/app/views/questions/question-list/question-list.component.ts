@@ -7,6 +7,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { MatInput, MatDialog, MatTable } from '@angular/material';
 import {MatFormField} from '@angular/material/form-field';
 import { DialogBoxComponent } from 'src/app/components/dialog-box/dialog-box.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class QuestionListComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<any>;
 
   questions: Array<Question>;
-  constructor(questionsSvc: QuestionsService, public dialog: MatDialog) {
+  constructor(questionsSvc: QuestionsService, public dialog: MatDialog, private router : Router) {
     questionsSvc.questions$.subscribe(q => {
       this.questions = q;
       console.log(this.questions);
@@ -50,6 +51,8 @@ export class QuestionListComponent implements OnInit {
     return item.id;
   }
 
+
+
   openDialog(action,obj) {
     obj.action = action;
     const dialogRef = this.dialog.open(DialogBoxComponent, {
@@ -58,7 +61,7 @@ export class QuestionListComponent implements OnInit {
     });
  
     dialogRef.afterClosed().subscribe(result => {
-      if(result.event == 'Agregar'){
+      if(result.event == 'Añadir'){
         this.addRowData(result.data);
       }else if(result.event == 'Actualizar'){
         this.updateRowData(result.data);
@@ -68,41 +71,44 @@ export class QuestionListComponent implements OnInit {
     });
   }
  
-  addRowData(row_obj){
-    
-    const data = this.dataSource.data;
 
-    
-    data.push({
-      id:data.length + 1, 
-      name:row_obj.name,
-      phone:row_obj.phone,
-      email:row_obj.email,
-      message: row_obj.message
-    });
-    this.dataSource.data = data;
-   
-    this.table.renderRows();
-    
-  }
-  
-  updateRowData(row_obj){
-    this.dataSource.data = this.dataSource.data.filter((value,key)=>{
-      if(value.id == row_obj.id){
-        value.name = row_obj.name;
-        value.phone = row_obj.phone;
-        value.email = row_obj.email;
-        value.message = row_obj.message;
+  //Reemplazar estos metodos por servicios brindados en questions.service.ts 
 
-      }
-      return true;
-    });
-  }
-  deleteRowData(row_obj){
-    this.dataSource.data = this.dataSource.data.filter((value,key)=>{
-      return value.id != row_obj.id;
-    });
-  }
+    addRowData(row_obj){
+      
+      const data = this.dataSource.data;
+
+      
+      data.push({
+        id:data.length + 1,  //momentaneo, obtener el max id del array
+        name:row_obj.name,
+        phone:row_obj.phone,
+        email:row_obj.email,
+        message: row_obj.message
+      });
+      this.dataSource.data = data;
+    
+      this.table.renderRows();
+      
+    }
+    
+    updateRowData(row_obj){
+      this.dataSource.data = this.dataSource.data.filter((value,key)=>{
+        if(value.id == row_obj.id){
+          value.name = row_obj.name;
+          value.phone = row_obj.phone;
+          value.email = row_obj.email;
+          value.message = row_obj.message;
+
+        }
+        return true;
+      });
+    }
+    deleteRowData(row_obj){
+      this.dataSource.data = this.dataSource.data.filter((value,key)=>{
+        return value.id != row_obj.id;
+      });
+    }
 
 
 }

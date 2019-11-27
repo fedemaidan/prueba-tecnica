@@ -19,7 +19,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule, MatDialogModule, MatButtonModule } from '@angular/material';
 import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
 import {MatSelectModule} from '@angular/material/select';
-import {MatIconModule} from '@angular/material/icon'
+import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
+
 
 
 
@@ -48,7 +51,8 @@ import {MatIconModule} from '@angular/material/icon'
     MatDialogModule,
     MatButtonModule,
     MatSelectModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule
   ],
   entryComponents: [
     DialogBoxComponent
