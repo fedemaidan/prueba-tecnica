@@ -236,6 +236,9 @@ class RefreshResource(Resource):
 
 questions_ns = api.namespace('questions', description='Questions')
 
+
+#Debo completar ambos serializadores con los campos correspondientes: son los que espero del front, también, los que voy a almacenar en la BD
+
 submit_question_fields = api.model('AskAQuestion', {
 })
 
@@ -243,42 +246,61 @@ question_fields = api.model('Question', {
 
 })
 
-@questions_ns.route('')
+
+@questions_ns.route('/questions')
 class QuestionsResource(Resource):
-    @questions_ns.doc('list_questions', expect=[auth_parser])
-    @questions_ns.marshal_list_with(question_fields, code=200, description="Model list")
+    @questions_ns.doc('list_questions', expect=[auth_parser]) #documentacion del metodo
+    @questions_ns.marshal_list_with(question_fields, code=200, description="Model list") #reciba los campos que esta esperando en el modelo 
     @questions_ns.response(401, "Access denied", generic_error)
-    @jwt_required
+    @jwt_required #este metodo requiere un token para poder ejecutarse. En header mando un Token y en Body el json
     def get(self):
-        """
-        List available questions
-        """
-        assert_broker()
+        #"""
+        #List available questions
+        #"""
+
+        #Con las anotations valido que lo que me mandan es correcto
+        #Podria tener logica del negocio
+        #Devuelvo todo lo que tengo en la BD/array
+        #En caso de que sean muchos registros almacenados, podria filtrar por "cantidad de registros por pagina" que el usuario desea leer (ese dato se selecciona en el Front)
+        #Validar que el Usuario/rol que esta haciendo esta request, tenga los permisos necesarios para poder ver los datos (Para mejorar la seguridad)
+        #Con respecto al punto anterior, se aclara que los roles de tipo "Broker" podrian ver SOLO sus consultas, y no la de otros brokers.
+
+        return 'hola'
+        
+        #assert_broker()
         ### TODO: brokers should only be able to read their own questions, not others'
-        return []
+        #return []
 
     @questions_ns.doc('ask_a_question', body=submit_question_fields)
-    @api.expect(submit_question_fields)
+    @api.expect(submit_question_fields) #espera el serializador submit_question_fields
     @api.response(200, "Success")
     @api.response(400, "Missing parameters", generic_error)
     def post(self):
         """
         Creates a question
         """
-        question = api.payload
+        #Conexion con BD (ya sea si es un motor o una en memoria, estilo redis)
+        #Que el "modelo" de los campos recibidos del Front, sea igual a lo esperado por la API (submit_question_fields)
+        #Validar cada campo, tipo de dato, longitud
+        #Contemplar la concurrencia, transacciones abiertas, y que no se pisen datos. (Consistencia)
+        #Si no se puede guardar en la BD, que se muestre porque en el Front(msj de error), y hacer rollback de la transaccion 
+        #Que no se pierdan datos enviados a la API, y devolverlos al Front para que modifique lo que sea necesario, en caso de que estos no hallan pasado las validacions
+
+        question = api.payload #payload es el Body de la request (donde va el json)
+
 
         return None, 200
 
 
-@questions_ns.param('question_id', 'The question ID')
-@questions_ns.route('/<string:question_id>')
-@questions_ns.response(404, "Question not found", generic_error)
+@questions_ns.param('question_id', 'The question ID') 
+@questions_ns.route('/<string:question_id>')  #aca indico que recibe un ID la url 
+@questions_ns.response(404, "Question not found", generic_error) #por defecto asumimos que esta mal
 @api.doc(params={'question_id': 'Question ID'})
 class QuestionResource(Resource):
 
     @jwt_required
     @questions_ns.doc('get_question', expect=[auth_parser])
-    @questions_ns.marshal_with(question_fields, code=200, description="Returns the question")
+    @questions_ns.marshal_with(question_fields, code=200, description="Returns the question") #marshea(matchea) con el modelo establecido en question_fields
     @questions_ns.response(401, "Access denied", generic_error)
     def get(self, question_id):
         """
@@ -286,6 +308,13 @@ class QuestionResource(Resource):
 
         :raises Unauthorized: When current user has insufficient permissions
         """
+
+        #Conexion con BD (ya sea si es un motor o una en memoria, estilo redis)
+        #Verificar que formato de ID sea correcto (el de la question en particular que quiero obtener)
+        #Que el usuario que lo solicita esta request, tenga los permisos necesario, en caso de que no, mostrar correspondiente de error
+        #Hacer el get efectivamente 
+        #Basicamente, son los mismos puntos que el GET de TODAS las questions
+
         return None
 
     @jwt_required
@@ -298,6 +327,9 @@ class QuestionResource(Resource):
         :raises Unauthorized: When current user has insufficient permissions
         :raises BadRequest: When couldn't delete the question
         """
+
+        #Los mismos aspectos a tener en cuenta que en POST de una Question, hay que tenerlos en esta instancia, al momento de borar una Question. 
+        
         try:
             return '', 200
         except:
@@ -307,7 +339,7 @@ class QuestionResource(Resource):
 
 def run():
     DEBUG = os.environ.get('DEBUG', False)
-    BIND = os.environ.get('GUNICORN_BIND', '0.0.0.0:8000')
+    BIND = os.environ.get('GUNICORN_BIND', '127.0.0.1:8000')
     (HOST, PORT, *_) = BIND.split(':')
 
     app.run(debug=DEBUG, host=HOST, port=PORT)
